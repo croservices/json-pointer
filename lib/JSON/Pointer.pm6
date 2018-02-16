@@ -46,6 +46,7 @@ class JSON::Pointer {
     method parse(Str $pointer --> JSON::Pointer) {
         my @parts;
         my $result = JSONPointer.parse($pointer);
+        die X::JSON::Pointer::InvalidSyntax.new(:$pointer) without $result;
         for $result[0] {
             my $token = self!escape(~$_<reference-token>[0].join);
             $token = $token.Int if $token ~~ /^\d+$/;
