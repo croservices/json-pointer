@@ -1,5 +1,4 @@
 use v6.c;
-unit class JSON::Pointer:ver<0.0.1>;
 
 class X::JSON::Pointer::InvalidSyntax is Exception {
     has $.pos;
@@ -15,6 +14,69 @@ class X::JSON::Pointer::NonExistent is Exception {
 
     method message() {
         "Element does not exist at $!element"
+    }
+}
+
+my grammar JSONPointer {
+    token TOP { ('/' <reference-token>) * }
+    token reference-token { (<unescaped> || <escaped>)+ }
+    token unescaped { <[\x00 .. \x2E \x30 .. \x7D \x7F .. \x10FFFF]> }
+    token escaped   { '~' <[01]> }
+}
+
+class JSON::Pointer {
+    has @.parts;
+
+    method !escape($token) {
+        my $res = $token.subst('~1', '/', :g);
+        $res.subst('~0', '~', :g);
+    }
+    method !unescape($token) {
+        my $res = $token.subst('~', '~0', :g);
+        $res.subst('/', '~1', :g);
+    }
+
+    multi method new(*@parts) {
+        self.bless(parts => @parts.map({self!escape($_)}));
+    }
+    multi method new(:@parts) {
+        self.bless(:@parts);
+    }
+
+    method parse(Str $pointer --> JSON::Pointer) {
+        my @parts;
+        my $result = JSONPointer.parse($pointer);
+        for $result[0] {
+            my $token = self!escape(~$_<reference-token>[0].join);
+            $token = $token.Int if $token ~~ /^\d+$/;
+            @parts.push: $token;
+        }
+        self.new(:@parts);
+    }
+
+    method tokens() { @!parts }
+
+    multi method resolve($json) {
+        return $json if @!parts.elems == 0;
+        my $res = $json;
+        for @!parts {
+            $res = self.resolve($res, $_);
+        }
+        $res;
+    }
+
+    multi method resolve(Associative $json, $part) {
+        return fail X::JSON::Pointer::NonExistent.new(:element($part)) if $part !~~ Str;
+        $json{$part} // fail X::JSON::Pointer::NonExistent.new(:element($part));
+    }
+    multi method resolve(Positional $json, $part) {
+        return fail X::JSON::Pointer::NonExistent.new(:element($part)) if $part !~~ Int;
+        $json[$part] // fail X::JSON::Pointer::NonExistent.new(:element($part));
+    }
+    multi method resolve(Failure $f, $_) { $f }
+
+    method Str() {
+        '/' ~ @!parts.map({self!unescape($_)}).join('/');
     }
 }
 
