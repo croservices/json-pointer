@@ -1,6 +1,22 @@
 use v6.c;
 unit class JSON::Pointer:ver<0.0.1>;
 
+class X::JSON::Pointer::InvalidSyntax is Exception {
+    has $.pos;
+    has $.pointer;
+
+    method message() {
+        "Invalid syntax at {$!pos} when trying to resolve {$!pointer}"
+    }
+}
+
+class X::JSON::Pointer::NonExistent is Exception {
+    has $.element;
+
+    method message() {
+        "Element does not exist at $!element"
+    }
+}
 
 =begin pod
 
