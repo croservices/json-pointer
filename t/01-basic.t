@@ -26,11 +26,7 @@ is $p2.resolve($sample-json), 101, 'resolve works for escaped pointer';
 
 # A Failure is returned upon resolution failure
 my $p3 = JSON::Pointer.parse('/foo/2/missing');
-with $p3.resolve($sample-json) {
-    flunk "Non-existent pointer was resolved";
-} else {
-    pass "Could not resolve non-existent pointer";
-}
+throws-like { $p3.resolve($sample-json) }, X::JSON::Pointer::NonExistent, 'dies on non-existed element';
 
 # Construct a JSON pointer
 my $p4 = JSON::Pointer.new('foo', 0, 'weird~odd/name');
