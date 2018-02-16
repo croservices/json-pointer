@@ -48,12 +48,12 @@ JSON::Pointer is a Perl 6 module that implements JSON Pointer conception.
 AUTHOR
 ======
 
-Altai-man <altay-man@mail.ru>
+Alexander Kiryuhin <alexander.kiryuhin@gmail.com>
 
 COPYRIGHT AND LICENSE
 =====================
 
-Copyright 2018 Altai-man
+Copyright 2018 Edument Central Europe sro.
 
 This library is free software; you can redistribute it and/or modify it under the Artistic License 2.0.
 
