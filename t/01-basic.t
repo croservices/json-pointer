@@ -36,6 +36,10 @@ is ~$p4, '/foo/0/weird~0odd~1name', 'Pointer correctly applies Str';
 my $p5 = JSON::Pointer.new('~01');
 is ~$p5, '/~01', 'Pointer correctly applies Str';
 
+# Invalid conditions
 throws-like { JSON::Pointer.parse('no-slash') }, X::JSON::Pointer::InvalidSyntax, 'dies on invalid syntax';
+
+throws-like { JSON::Pointer.parse('/foo/-').resolve($sample-json) },
+    X::JSON::Pointer::NonExistent, 'dies on 「-」 array index';
 
 done-testing;

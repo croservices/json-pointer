@@ -71,6 +71,7 @@ class JSON::Pointer {
         $json{$part} // fail X::JSON::Pointer::NonExistent.new(:element($part));
     }
     multi method resolve(Positional $json, $part) {
+        return fail X::JSON::Pointer::NonExistent.new(:element($part)) if $part eq '~';
         return fail X::JSON::Pointer::NonExistent.new(:element($part)) if $part !~~ Int;
         $json[$part] // fail X::JSON::Pointer::NonExistent.new(:element($part));
     }
