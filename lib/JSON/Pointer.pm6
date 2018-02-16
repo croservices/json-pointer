@@ -49,7 +49,7 @@ class JSON::Pointer {
         die X::JSON::Pointer::InvalidSyntax.new(:$pointer) without $result;
         for $result[0] {
             my $token = self!escape(~$_<reference-token>[0].join);
-            $token = $token.Int if $token ~~ /^\d+$/;
+            $token = $token.Int if $token ~~ /^ ('0' || <[1..9]>\d*) $/;
             @parts.push: $token;
         }
         self.new(:@parts);
