@@ -5,7 +5,7 @@ class X::JSON::Pointer::InvalidSyntax is Exception {
     has $.pointer;
 
     method message() {
-        "Invalid syntax at {$!pos} when trying to resolve {$!pointer}"
+        "Invalid syntax at {$!pos} when trying to resolve 「{$!pointer}」"
     }
 }
 
@@ -18,10 +18,15 @@ class X::JSON::Pointer::NonExistent is Exception {
 }
 
 my grammar JSONPointer {
-    token TOP { ('/' <reference-token>) * }
+    token TOP { ['/' <reference-token> || <.panic()>]*? $ }
     token reference-token { (<unescaped> || <escaped>)+ }
     token unescaped { <[\x00 .. \x2E \x30 .. \x7D \x7F .. \x10FFFF]> }
     token escaped   { '~' <[01]> }
+
+    method panic() {
+        die X::JSON::Pointer::InvalidSyntax.new(pos => self.CURSOR.pos,
+                                                pointer => self.CURSOR.orig);
+    }
 }
 
 class JSON::Pointer {
@@ -46,9 +51,8 @@ class JSON::Pointer {
     method parse(Str $pointer --> JSON::Pointer) {
         my @parts;
         my $result = JSONPointer.parse($pointer);
-        die X::JSON::Pointer::InvalidSyntax.new(:$pointer) without $result;
-        for $result[0] {
-            my $token = self!escape(~$_<reference-token>[0].join);
+        for $result<reference-token> {
+            my $token = self!escape(~$_[0].join);
             $token = $token.Int if $token ~~ /^ ('0' || <[1..9]>\d*) $/;
             @parts.push: $token;
         }
