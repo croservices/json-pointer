@@ -17,7 +17,7 @@ class X::JSON::Pointer::NonExistent is Exception {
     }
 }
 
-my grammar JSONPointer {
+grammar JSONPointer {
     token TOP { ['/' <reference-token> || <.panic()>]*? $ }
     token reference-token { (<unescaped> || <escaped>)+ }
     token unescaped { <[\x00 .. \x2E \x30 .. \x7D \x7F .. \x10FFFF]> }

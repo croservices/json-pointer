@@ -1,6 +1,7 @@
 use v6.c;
 use Test;
 use JSON::Pointer;
+use JSON::Pointer::Relative;
 
 # An example document to resolve pointers in
 my $sample-json = {
@@ -41,5 +42,11 @@ throws-like { JSON::Pointer.parse('no-slash') }, X::JSON::Pointer::InvalidSyntax
 
 throws-like { JSON::Pointer.parse('/foo/-').resolve($sample-json) },
     X::JSON::Pointer::NonExistent, 'dies on 「-」 array index';
+
+subtest {
+    for <0 0# 1 1/0 1/grandchild 1/awkwardly~1named~0variable> -> $rel {
+        is $rel, ~JSONPointerRelative.parse($rel);
+    }
+}, 'Relative pointer checks';
 
 done-testing;
