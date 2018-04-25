@@ -1,10 +1,8 @@
-NAME
-====
+# JSON::Pointer
 
-JSON::Pointer - JSON Pointer implementation in Perl 6.
+A JSON Pointer implementation in Perl 6.
 
-SYNOPSIS
-========
+## Synopsis
 
     use JSON::Pointer;
 
@@ -40,20 +38,16 @@ SYNOPSIS
     my $p4 = JSON::Poiner.new('foo', 0, 'weird~odd/name');
     say ~$p4; # /foo/0/weird~0odd~1name
 
-DESCRIPTION
-===========
+## Description
 
 JSON::Pointer is a Perl 6 module that implements JSON Pointer conception.
 
-AUTHOR
-======
+## Author
 
 Alexander Kiryuhin <alexander.kiryuhin@gmail.com>
 
-COPYRIGHT AND LICENSE
-=====================
+## Copyright and License
 
 Copyright 2018 Edument Central Europe sro.
 
 This library is free software; you can redistribute it and/or modify it under the Artistic License 2.0.
-
