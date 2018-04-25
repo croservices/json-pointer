@@ -15,6 +15,6 @@
     "resources" : [ ],
     "source-url" : "https://github.com/croservices/json-pointer.git",
     "tags" : [ ],
-    "test-depends" : [ ],
+    "test-depends" : [ "json" ],
     "version" : "1.0"
 }
