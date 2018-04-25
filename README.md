@@ -35,7 +35,7 @@ A JSON Pointer implementation in Perl 6.
     }
 
     # Construct a JSON pointer
-    my $p4 = JSON::Poiner.new('foo', 0, 'weird~odd/name');
+    my $p4 = JSON::Pointer.new('foo', 0, 'weird~odd/name');
     say ~$p4; # /foo/0/weird~0odd~1name
 
 ## Description
