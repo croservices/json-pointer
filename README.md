@@ -1,6 +1,6 @@
-# JSON::Pointer
+# JSON::Pointefr ![Build Status](https://github.com/croservices/json-pointer/actions/workflows/ci.yml/badge.svg)
 
-A JSON Pointer implementation in Perl 6.
+A JSON Pointer implementation in Raku.
 
 ## Synopsis
 
@@ -40,7 +40,7 @@ A JSON Pointer implementation in Perl 6.
 
 ## Description
 
-JSON::Pointer is a Perl 6 module that implements JSON Pointer conception.
+JSON::Pointer is a Raku module that implements JSON Pointer conception.
 
 ## Author
 
